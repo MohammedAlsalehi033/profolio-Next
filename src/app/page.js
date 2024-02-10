@@ -3,6 +3,7 @@
 import ProjectCard from './ProjectCard'; 
 import PersonalDataSection from './PersonalSection';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 
 export default function Home() {
@@ -101,66 +102,40 @@ const mobileAppProjects = [
   
 ];
 const [isVisible, setIsVisible] = useState(true);
+const router = useRouter();
+
+
+const ProjectSection = ({ title, projects }) => (
+  <section className="mb-8">
+    <h2 className="text-xl lg:text-2xl font-semibold mb-4 bg-blue-200 p-4 rounded-lg text-blue-800 text-center">
+      {title}
+    </h2>
+    <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 lg:max-w-7xl lg:text-left mx-auto">
+      {projects.map((project, index) => (
+        <ProjectCard key={index} {...project} cardClass="lg:w-1/4" />
+      ))}
+    </div>
+  </section>
+);
 
 return (
-  <main className="flex min-h-screen flex-col lg:flex-row items-start justify-center p-24">
-
+  <main className="flex min-h-screen flex-col items-start justify-center p-4">
+  {/* Floating Link */}
+  <div className="fixed bottom-20 right-20">
     <button
-        className="bg-blue-500 text-white font-bold text-lg p-4 rounded-full fixed right-8 bottom-8 shadow-lg z-10"
-        onClick={() => setIsVisible(!isVisible)}
-      >
-        {isVisible ? 'Hide Personal Section' : 'Show Personal Section'}
-      </button>
+      className="bg-blue-500 text-white px-6 py-7 rounded-md hover:bg-blue-600 transition duration-300"
+      onClick={() => router.push('/personal-data')}
+    >
+      Personal Data
+    </button>
+  </div>
 
-
-
-    {isVisible && (
-      <PersonalDataSection isVisible={isVisible} toggleVisibility={() => setIsVisible(!isVisible)} />
-    )}
-
-
-
-    <div className={`lg:w-full lg:overflow-y-auto ${isVisible ? 'lg:w-2/5' : 'lg:w-full'}`}>
-      
-    <section className="mb-12">
-      <h2 className="text-2xl md:text-3xl font-semibold mb-4 bg-blue-200 p-4 rounded-lg text-blue-800 mx-auto max-w-2xl text-center">
-          Game Projects
-        </h2>
-        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 lg:max-w-5xl lg:text-left mx-auto">
-          {gameProjects.map((project, index) => (
-            <ProjectCard key={index} {...project} />
-          ))}
-        </div>
-      </section>
-
-    <section className="mb-12">
-      <h2 className="text-2xl md:text-3xl font-semibold mb-4 bg-blue-200 p-4 rounded-lg text-blue-800 mx-auto max-w-2xl text-center">
-          Mobile App Projects
-        </h2>
-        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 lg:max-w-5xl lg:text-left mx-auto">
-          {mobileAppProjects.map((project, index) => (
-            <ProjectCard key={index} {...project} />
-          ))}
-        </div>
-      </section>
-      
-      <section className="mb-12">
-      <h2 className="text-2xl md:text-3xl font-semibold mb-4 bg-blue-200 p-4 rounded-lg text-blue-800 mx-auto max-w-2xl text-center">
-          Web Projects
-        </h2>
-        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 lg:max-w-5xl lg:text-left mx-auto">
-          {webProjects.map((project, index) => (
-            <ProjectCard key={index} {...project} />
-          ))}
-        </div>
-      </section>
-
-
-
-     
-
-    
-    </div>
-  </main>
+  <div className="w-full overflow-y-auto">
+    <ProjectSection title="Game Projects" projects={gameProjects} />
+    <ProjectSection title="Mobile App Projects" projects={mobileAppProjects} />
+    <ProjectSection title="Web Projects" projects={webProjects} />
+  </div>
+</main>
 );
+ 
 }
